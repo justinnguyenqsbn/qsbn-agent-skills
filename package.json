@@ -1,0 +1,7 @@
+{
+  "name": "qsbn-agent-skills",
+  "version": "0.0.0-alpha",
+  "private": true,
+  "description": "Product Owner / Project Manager / Developer backlog and delivery workflow skills for Claude Code, backed by Azure DevOps",
+  "license": "MIT"
+}
