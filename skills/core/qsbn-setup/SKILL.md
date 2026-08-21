@@ -39,9 +39,14 @@ skill reads this file, so run this one first.
 
 3. **Choose the submodule subfolder**
    - Ask what subfolder code repos should be pulled into as git
-     submodules (default: `src`). Save it, but do not create the folder
-     or add any submodule yourself — that's the user's own
-     `git submodule add` step, entirely outside this skill's scope.
+     submodules (default: `src`).
+   - Create the folder (`mkdir -p <folder>`) and add it to `.gitignore`,
+     so an empty placeholder directory doesn't need a tracked file to
+     exist. Do not add any submodule yourself — `git submodule add` is
+     entirely the user's own step, outside this skill's scope.
+   - Note for the user: because the folder is gitignored, adding a
+     submodule under it later will require `git submodule add -f`
+     (git otherwise refuses to add a path inside an ignored directory).
 
 4. **Choose the story tag**
    - Ask what tag synced stories should carry in the tracker, so they're
@@ -98,7 +103,8 @@ skill reads this file, so run this one first.
 
 ## Notes
 
-- This skill only ever writes `.qsbn/config.toml`. It never touches
-  `artifacts/`, `specs/`, or `src/`.
+- This skill writes `.qsbn/config.toml` and creates the submodule
+  subfolder from step 3. It never touches `artifacts/`, `specs/`, or
+  the contents of `src/` beyond creating the empty folder itself.
 - Re-running is always safe: step 1 always shows current values before
   anything changes.
