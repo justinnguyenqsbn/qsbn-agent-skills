@@ -28,6 +28,14 @@ skill, regardless of what's installed.
    - Apply INVEST: Independent, Negotiable, Valuable, Estimable, Small,
      Testable. Format: "As a [persona], I want to [action], so that
      [benefit]."
+   - Each story must be a demoable, meaningful slice of a user's
+     journey — something a stakeholder could watch happen end-to-end.
+     Don't cut stories along technical layers (e.g. "build the database
+     schema" is not a story). A technical-only story (infra, migration,
+     no direct demo) is the exception, not the norm: use one only when
+     there's a genuine non-demoable prerequisite that can't be reframed
+     as user-facing, and treat that as a deliberate call, not a default
+     taken for convenience.
 
 3. **Write acceptance criteria per story**
    - Given/When/Then format, 3-7 criteria per story.
@@ -35,7 +43,6 @@ skill, regardless of what's installed.
      state.
 
 4. **Add story metadata**
-   - Story points (1, 2, 3, 5, 8, 13).
    - Priority: must-have, should-have, or nice-to-have.
    - Dependencies on other stories from this same feature, if any.
 
@@ -52,7 +59,7 @@ skill, regardless of what's installed.
      last_synced: null
      ---
 
-     # <n>. <Story title>
+     # <n>. [<feature-slug>] <Story title>
 
      **As a** <persona>
      **I want to** <action>
@@ -65,10 +72,11 @@ skill, regardless of what's installed.
 
      ## Details
 
-     - Story points: <n>
      - Priority: must-have | should-have | nice-to-have
      - Dependencies: <story IDs, or "none">
      ```
+     For the technical-only exception from step 2, the title becomes
+     `# <n>. [<feature-slug>] [TECH] <Story title>`.
 
 6. **Summarize**
    - After writing all files, list them with a one-line description each,
