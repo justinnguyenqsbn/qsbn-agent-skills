@@ -25,7 +25,14 @@ skill reads this file, so run this one first.
      today — I'll save your choice, but sync-to-tracker won't do anything
      for this tracker yet." Save the choice anyway, so the field is
      already set once support lands.
-   - If Azure DevOps: ask for the organization name and project name.
+   - If Azure DevOps: ask for the organization name, project name, and
+     area path (e.g. `MyProject\Backend`). Ask for the iteration path
+     too, but make clear it's optional — leave it blank to let Azure
+     DevOps fall back to the team's default iteration.
+   - Do not ask for a default parent epic/feature. `qsbn-sync-to-tracker`
+     always parents a story to its own feature's epic (synced in the
+     same run), never to a statically configured work item — there's
+     nothing to collect here.
      Check the CLI is ready:
      ```bash
      az account show >/dev/null 2>&1 || echo "not logged in"
@@ -84,6 +91,8 @@ skill reads this file, so run this one first.
      [ado]
      organization = "..."
      project = "..."
+     area_path = "..."
+     iteration_path = ""
 
      submodule_root = "src"
 
