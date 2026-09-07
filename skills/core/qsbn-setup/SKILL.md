@@ -25,7 +25,14 @@ skill reads this file, so run this one first.
      today — I'll save your choice, but sync-to-tracker won't do anything
      for this tracker yet." Save the choice anyway, so the field is
      already set once support lands.
-   - If Azure DevOps: ask for the organization name and project name.
+   - If Azure DevOps: ask for the organization name, project name, and
+     area path (e.g. `MyProject\Backend`). Ask for the iteration path
+     too, but make clear it's optional — leave it blank to let Azure
+     DevOps fall back to the team's default iteration.
+   - Do not ask for a default parent epic/feature. `qsbn-sync-to-tracker`
+     always parents a story to its own feature's epic (synced in the
+     same run), never to a statically configured work item — there's
+     nothing to collect here.
      Check the CLI is ready:
      ```bash
      az account show >/dev/null 2>&1 || echo "not logged in"
@@ -36,6 +43,25 @@ skill reads this file, so run this one first.
      behalf. If the extension is missing, tell them to run
      `az extension add --name azure-devops`. Report the check results;
      don't run either fix yourself.
+   - Check whether the `azure-devops-cli` skill is installed, globally or
+     locally:
+     ```bash
+     ls ~/.claude/skills 2>/dev/null | grep -i azure-devops-cli
+     ls ~/.claude/plugins 2>/dev/null | grep -i azure-devops-cli
+     ls .claude/skills 2>/dev/null | grep -i azure-devops-cli
+     ```
+     `qsbn-sync-to-tracker`'s exact `az boards` / `az devops invoke`
+     command syntax depends on this skill being present, so treat it as
+     required, not optional, for the Azure DevOps tracker. If none of
+     the checks find it, tell the user it's required and ask them to
+     confirm before installing it — do not run the install command
+     without an explicit yes:
+     ```
+     npx -y skills@latest add https://github.com/github/awesome-copilot --skill azure-devops-cli
+     ```
+     Only run it after the user confirms. If they decline, stop this
+     step and tell them Azure DevOps sync won't work correctly without
+     it — don't silently continue as if it were optional.
 
 3. **Choose the submodule subfolder**
    - Ask what subfolder code repos should be pulled into as git
@@ -84,6 +110,8 @@ skill reads this file, so run this one first.
      [ado]
      organization = "..."
      project = "..."
+     area_path = "..."
+     iteration_path = ""
 
      submodule_root = "src"
 
