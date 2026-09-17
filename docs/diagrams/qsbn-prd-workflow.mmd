@@ -1,0 +1,46 @@
+flowchart TD
+    A["/qsbn:prd invoked with $ARGUMENTS<br/>(optional --deep flag)"] --> B{"artifacts/prd.md<br/>exists?"}
+
+    B -- "No (first-ever run)" --> C["Product-level interview:<br/>what is the product? problem/for whom?<br/>target users/personas? top 2-4 goals?"]
+    C --> D["Write artifacts/prd.md<br/>(Overview, Problem Statement,<br/>Target Users, Product Goals, Features)"]
+    D --> S
+
+    B -- "Yes" --> E["Read artifacts/prd.md<br/>as context"]
+    E --> S["Scout the project folder:<br/>read .qsbn/config.toml submodule_root,<br/>glob/grep for overlap with $ARGUMENTS,<br/>skim README/docs — skip silently if<br/>missing/empty, summarize if found"]
+
+    S --> F{"Request bundles<br/>multiple independent<br/>features?"}
+
+    F -- "Yes" --> G["List proposed split,<br/>confirm with user"]
+    G --> H["Repeat feature steps<br/>once per split-out feature"]
+    H --> I
+
+    F -- "No" --> I["Feature-level interview (adaptive):<br/>purpose, who/scenario, constraints,<br/>success criteria, out of scope, touchpoints —<br/>one-at-a-time or batched, clarify any<br/>vague/hedged answer before moving on"]
+    I --> P{"--deep flag, or description<br/>names a solution instead<br/>of a user outcome?"}
+
+    P -- "Yes" --> Q["Ask: what's not working today,<br/>and what happens if we don't build it?<br/>Record as Problem Validation"]
+    Q --> J
+
+    P -- "No (default)" --> J["Generate feature slug:<br/>kebab-case title, dedupe with -2/-3,<br/>reject reserved 'prd'/'epics'"]
+    J --> K["Write feature PRD at<br/>artifacts/&lt;feature-slug&gt;/prd.md"]
+    K --> L{"Product PRD<br/>pre-existed?"}
+
+    L -- "No (just created)" --> M["Append feature link under<br/>artifacts/prd.md Features section"]
+    L -- "Yes" --> N["Ask user: does this feature<br/>change product-level info?"]
+    N --> M
+    M --> O(["Done"])
+
+    N1["Notes:<br/>- Built-in only — never delegates to a<br/>third-party interview skill<br/>- Reads exactly one field from<br/>.qsbn/config.toml (submodule_root, for<br/>scouting) — never reads delegation<br/>preferences, never writes the file<br/>- Scouting is best-effort and silent<br/>when it finds nothing<br/>- Only writes artifacts/prd.md and<br/>artifacts/&lt;feature-slug&gt;/prd.md —<br/>epic assignment is qsbn-propose-epic's job"]
+
+    classDef decision fill:#ffe6cc,stroke:#d79b00,stroke-width:2px
+    classDef process fill:#dae8fc,stroke:#6c8ebf,stroke-width:2px
+    classDef terminal fill:#d5e8d4,stroke:#82b366,stroke-width:2px
+    classDef note fill:#fff2cc,stroke:#d6b656,stroke-width:1px
+    classDef scout fill:#e1d5e7,stroke:#9673a6,stroke-width:2px
+    classDef optional fill:#f8cecc,stroke:#b85450,stroke-width:2px,stroke-dasharray: 5 5
+
+    class B,F,L,P decision
+    class A,C,D,E,G,H,I,J,K,M,N process
+    class S scout
+    class Q optional
+    class O terminal
+    class N1 note
