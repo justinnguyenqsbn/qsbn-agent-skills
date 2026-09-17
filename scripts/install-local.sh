@@ -25,8 +25,9 @@ fi
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 DEST_SKILLS="$TARGET/.claude/skills"
 DEST_COMMANDS="$TARGET/.claude/commands/qsbn"
+DEST_AGENTS="$TARGET/.claude/agents"
 
-mkdir -p "$DEST_SKILLS" "$DEST_COMMANDS"
+mkdir -p "$DEST_SKILLS" "$DEST_COMMANDS" "$DEST_AGENTS"
 
 place() {
   local src="$1" dest="$2"
@@ -53,6 +54,12 @@ for cmd in "$REPO"/commands/qsbn/*.md; do
   [ -e "$cmd" ] || continue
   place "$cmd" "$DEST_COMMANDS/$(basename "$cmd")"
 done
+
+while IFS= read -r -d '' agent_md; do
+  name="$(basename "$agent_md")"
+  place "$agent_md" "$DEST_AGENTS/$name"
+  echo "$MODE: $name -> $DEST_AGENTS/$name"
+done < <(find "$REPO/skills" -path '*/agents/*.md' -print0 2>/dev/null)
 
 if [ "$found" -eq 0 ]; then
   echo "no skills found under $REPO/skills yet"

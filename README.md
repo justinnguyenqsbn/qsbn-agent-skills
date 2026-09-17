@@ -28,7 +28,7 @@ Appendix for what's agreed so far.
 
 ```bash
 scripts/list-skills.sh   # list every SKILL.md in the repo
-scripts/link-skills.sh   # symlink every skill into ~/.claude/skills for local testing
+scripts/link-skills.sh   # symlink every skill/agent into ~/.claude/skills and ~/.claude/agents for local testing
 ```
 
 `link-skills.sh` is for testing this repo's own skills locally only. End
